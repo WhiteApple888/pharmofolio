@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+/jspm_packages/
+.venv/
+env/
+venv/
+ENV/
+
+# Build and Outputs
+dist/
+build/
+.next/
+.nuxt/
+out/
+*.pyc
+__pycache__/
+
+# Secrets and Configs
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
