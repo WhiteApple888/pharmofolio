@@ -1,0 +1,4 @@
+{
+  "deprecated": "The Python backend reads OPENAI_API_KEY and other settings from .env; this file is retained only for legacy deployments.",
+  "port": 8000
+}

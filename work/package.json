@@ -1,0 +1,15 @@
+{
+  "name": "pharmpath-dfp-mapper",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node worker/build-site.mjs",
+    "db:generate": "drizzle-kit generate",
+    "test:hosted": "node --test tests/hosted-backend.test.mjs",
+    "start:legacy-worker": "node server.mjs"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.4",
+    "drizzle-orm": "^0.44.5"
+  }
+}

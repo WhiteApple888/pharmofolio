@@ -1,0 +1,12 @@
+Pharmacist Name,Pharmacist Job Grade,Career Track,RO,Section,team_view,division_view,Years in Job Grade
+Alex,P13,Advanced Practice,Sarah,Clinical Services,No,No,2
+Jane,P16,System-Enabling,Sarah,Clinical Services,No,No,3
+Ben,P17,Specialist,Sarah,Clinical Services,No,No,4
+Jack,P12,Foundation,Tommy,Outpatient pharmacy,No,No,5
+Alice,P13,System-Enabling,Tommy,Outpatient pharmacy,No,No,6
+Jamie,P16,Foundation,Tommy,ICH,No,No,7
+Benedict,P17,Advanced Practice,Betty,ICH,No,No,7
+Jeremy ,P12,Specialist,Betty,ICH,No,No,2
+Tommy,P18,Specialist,None,Pharmacy Director,Yes,Yes,6
+Betty,P17,Specialist,Tommy,Pharmacy Head,Yes,Yes,4
+Sarah,P17,Specialist,Tommy,Clinical Services,Yes,No,2

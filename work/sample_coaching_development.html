@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consolidated Development & Action Plan</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background-color: #eef2f7;
+      color: #1e293b;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #ffffff;
+      padding: 14px 28px;
+      border-bottom: 1px solid #dde3ec;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    /* ── Status Stepper ── */
+    .status-stepper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #94a3b8;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      position: relative;
+      cursor: default;
+      transition: background 0.2s;
+    }
+
+    .step:first-child { border-radius: 6px 0 0 6px; }
+    .step:last-child  { border-radius: 0 6px 6px 0; }
+    .step + .step     { border-left: none; }
+
+    .step-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step.active {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+      font-weight: 600;
+    }
+
+    .step.active .step-num {
+      background: #1d4ed8;
+    }
+
+    .step.done {
+      color: #16a34a;
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .step.done .step-num {
+      background: #16a34a;
+    }
+
+    /* ── Submit Button ── */
+    .btn-primary {
+      background: #1d4ed8;
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.01em;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(29, 78, 216, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #1e40af;
+      box-shadow: 0 3px 8px rgba(29, 78, 216, 0.35);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    /* ── Workspace Split ── */
+    .workspace {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── Document Canvas (Left) ── */
+    .document-canvas {
+      flex: 1;
+      padding: 28px 32px;
+      overflow-y: auto;
+      background: #ffffff;
+      margin: 16px 8px 16px 16px;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07), 0 4px 16px rgba(0, 0, 0, 0.04);
+    }
+
+    .document-canvas::-webkit-scrollbar { width: 6px; }
+    .document-canvas::-webkit-scrollbar-track { background: transparent; }
+    .document-canvas::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+    /* ── Document Header ── */
+    .doc-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f1f5f9;
+    }
+
+    .doc-meta-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .doc-meta-sub {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin-top: 3px;
+    }
+
+    .doc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .doc-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #1d4ed8;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    /* ── Sections ── */
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .section-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: #bfdbfe;
+    }
+
+    .card label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: #334155;
+    }
+
+    .card p + p {
+      margin-top: 4px;
+    }
+
+    .card .sub-text {
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-top: 5px;
+    }
+
+    /* ── Competency Tag ── */
+    .competency-tag {
+      display: inline-block;
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    /* ── Textarea ── */
+    .editable-area {
+      width: 100%;
+      min-height: 88px;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: #334155;
+      background: #ffffff;
+      line-height: 1.6;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .editable-area:focus {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.25);
+    }
+
+    .editable-area::placeholder {
+      color: #b0bec5;
+      font-style: italic;
+    }
+
+    /* ── Table ── */
+    .table-wrapper {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 11px 14px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    td {
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      color: #334155;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: top;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr {
+      transition: background 0.15s;
+    }
+
+    tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .date-chip {
+      display: inline-block;
+      background: #fef9c3;
+      color: #854d0e;
+      border: 1px solid #fde68a;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ── Coaching Panel (Right) ── */
+    .coaching-panel {
+      width: 360px;
+      background: #f8fafc;
+      border-left: 1px solid #dde3ec;
+      display: flex;
+      flex-direction: column;
+      margin: 16px 16px 16px 8px;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07), 0 4px 16px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 14px 18px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-header-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .panel-header-text strong {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .panel-header-text span {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    /* ── Chat History ── */
+    .chat-history {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-history::-webkit-scrollbar { width: 4px; }
+    .chat-history::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+
+    .chat-msg {
+      max-width: 88%;
+      padding: 10px 13px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+
+    .chat-msg.bot {
+      background: #ffffff;
+      color: #334155;
+      align-self: flex-start;
+      border: 1px solid #e2e8f0;
+      border-bottom-left-radius: 3px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .chat-msg.user {
+      background: #1d4ed8;
+      color: #ffffff;
+      align-self: flex-end;
+      border-bottom-right-radius: 3px;
+      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.3);
+    }
+
+    /* ── Suggestion Box ── */
+    .suggestion-box {
+      background: #eff6ff;
+      border: 1px dashed #93c5fd;
+      padding: 11px 13px;
+      border-radius: 7px;
+      margin-top: 10px;
+      font-size: 0.83rem;
+      color: #1e40af;
+      line-height: 1.5;
+    }
+
+    .suggestion-box strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #3b82f6;
+    }
+
+    .btn-push {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #1d4ed8;
+      color: #ffffff;
+      border: none;
+      padding: 5px 11px;
+      border-radius: 5px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 9px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-push:hover  { background: #1e40af; }
+    .btn-push:active { transform: translateY(1px); }
+
+    /* ── Chat Input ── */
+    .chat-input {
+      padding: 12px 14px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      color: #334155;
+      background: #f8fafc;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .chat-input input:focus {
+      border-color: #93c5fd;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.2);
+    }
+
+    .chat-input input::placeholder {
+      color: #b0bec5;
+    }
+
+    .chat-input .btn-primary {
+      padding: 9px 14px;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Development & Action Plan</h1>
+
+    <div class="status-stepper">
+      <div class="step active">
+        <span class="step-num">1</span> Self-Coaching
+      </div>
+      <div class="step">
+        <span class="step-num">2</span> Pending RO Review
+      </div>
+      <div class="step">
+        <span class="step-num">3</span> Finalised
+      </div>
+    </div>
+
+    <button class="btn-primary">Submit to RO →</button>
+  </header>
+
+  <div class="workspace">
+
+    <main class="document-canvas">
+
+      <div class="doc-meta">
+        <div>
+          <div class="doc-meta-title">Development & Action Plan — 2026</div>
+          <div class="doc-meta-sub">Last edited: 7 Sep 2026 · Officer: Jane Tan · Division: Strategy & Planning</div>
+        </div>
+        <div class="doc-badge">In Progress</div>
+      </div>
+
+      <section class="section">
+        <div class="section-header">
+          <div class="section-num">1</div>
+          <h2>Coaching Takeaways & Focus Areas</h2>
+        </div>
+        <div class="card">
+          <label>Key Insights from AI Coaching Session</label>
+          <textarea class="editable-area" placeholder="Notes auto-populated or added manually during coaching..."></textarea>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div class="section-num">2</div>
+          <h2>Development Objectives</h2>
+        </div>
+        <div class="card">
+          <p><strong>Target Competency:</strong> Strategic Leadership & Stakeholder Management</p>
+          <p class="sub-text">Goal: Enhance cross-functional communication and lead high-visibility projects.</p>
+          <span class="competency-tag">Leadership · L4</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div class="section-num">3</div>
+          <h2>Agreed Action Items</h2>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Action Item</th>
+                <th>Target Date</th>
+                <th>Support Needed from RO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Lead the Q3 product roadmap alignment workshop.</td>
+                <td><span class="date-chip">15 Oct 2026</span></td>
+                <td>Bi-weekly mentoring sessions.</td>
+              </tr>
+              <tr>
+                <td>Complete Executive Communication module.</td>
+                <td><span class="date-chip">30 Nov 2026</span></td>
+                <td>Sponsorship for external training course.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div class="section-num">4</div>
+          <h2>Reporting Officer (RO) Discussion Notes</h2>
+        </div>
+        <div class="card">
+          <label>RO Feedback & Approval Comments</label>
+          <textarea class="editable-area" placeholder="RO to add feedback and approval comments here..."></textarea>
+        </div>
+      </section>
+
+    </main>
+
+    <aside class="coaching-panel">
+      <div class="panel-header">
+        <div class="panel-header-icon">🤖</div>
+        <div class="panel-header-text">
+          <strong>AI Coaching Assistant</strong>
+          <span>Powered by Pair · Active session</span>
+        </div>
+      </div>
+
+      <div class="chat-history">
+        <div class="chat-msg bot">
+          Hello! What area of your leadership goals would you like to reflect on today?
+        </div>
+        <div class="chat-msg user">
+          I want to improve how I handle cross-departmental alignment.
+        </div>
+        <div class="chat-msg bot">
+          Great goal. Based on your profile, here is a suggested action item you can add directly to your plan:
+          <div class="suggestion-box">
+            <strong>Suggested Action</strong>
+            Lead the Q3 product roadmap alignment workshop to practise facilitating cross-functional discussions.
+            <br>
+            <button class="btn-push" onclick="alert('Added to Action Plan!')">+ Add to Plan</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <input type="text" placeholder="Ask your AI coach…">
+        <button class="btn-primary">Send</button>
+      </div>
+    </aside>
+
+  </div>
+
+</body>
+</html>

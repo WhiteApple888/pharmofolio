@@ -1,0 +1,1 @@
+ALTER TABLE `profiles` ADD `years_in_job_grade` real;

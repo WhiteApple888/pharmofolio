@@ -1,0 +1,9 @@
+[
+  {"path":"/", "file":"index.html", "contentType":"text/html; charset=utf-8"},
+  {"path":"/index.html", "file":"index.html", "contentType":"text/html; charset=utf-8"},
+  {"path":"/app.js", "file":"app.js", "contentType":"text/javascript; charset=utf-8"},
+  {"path":"/styles.css", "file":"styles.css", "contentType":"text/css; charset=utf-8"},
+  {"path":"/runtime-config.js", "file":"runtime-config.js", "hostedFile":"runtime-config.example.js", "contentType":"text/javascript; charset=utf-8"},
+  {"path":"/nhg_health_logo.png", "file":"nhg_health_logo.png", "contentType":"image/png", "encoding":"base64"},
+  {"path":"/favicon.ico", "file":"nhg_health_logo.png", "contentType":"image/png", "encoding":"base64"}
+]

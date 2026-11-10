@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Private pharmacist evidence, assessment, coaching, and development planning workspace." />
+  <title>PharmPath — DFP evidence mapper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="/runtime-config.js"></script>
+</head>
+<body>
+  <div id="auth-loading" class="auth-loading" role="status">Opening your private workspace…</div>
+
+  <main id="login-view" class="login-view hidden">
+    <section class="login-card" aria-labelledby="login-heading">
+      <div class="login-brand"><img class="nhg-logo login-logo" src="/nhg_health_logo.png" alt="NHG Health" /></div>
+      <div class="eyebrow">PRIVATE DEVELOPMENT WORKSPACE</div>
+      <h1 id="login-heading">Welcome back.</h1>
+      <p>Sign in to continue to your evidence, coaching conversations, and development plan.</p>
+      <form id="login-form">
+        <label for="login-username">Username</label>
+        <input id="login-username" name="username" autocomplete="username" required minlength="3" />
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" required />
+        <button class="primary-btn" type="submit" id="login-button">Sign in</button>
+        <p id="login-error" class="form-error" role="alert" aria-live="polite"></p>
+      </form>
+      <div class="login-note">Demonstration credentials are documented in the project README.</div>
+    </section>
+  </main>
+
+  <div class="app-shell hidden" id="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><img class="nhg-logo sidebar-logo" src="/nhg_health_logo.png" alt="NHG Health" /></div>
+      <div class="workspace-label">MY WORKSPACE</div>
+      <nav class="nav" aria-label="Primary navigation">
+        <button class="nav-item active" data-view="overview"><span aria-hidden="true">⌂</span> <span class="nav-label">Overview</span></button>
+        <button class="nav-item" data-view="evidence"><span aria-hidden="true">↥</span> <span class="nav-label">Evidence inbox</span> <b id="evidence-count">0</b></button>
+        <button class="nav-item" data-view="mappings"><span aria-hidden="true">◈</span> <span class="nav-label">Assessment</span> <b id="mapping-count">0</b></button>
+        <button class="nav-item" data-view="coaching-development"><span aria-hidden="true">✦</span> <span class="nav-label">Coaching &amp; development plan</span></button>
+        <button class="nav-item hidden" id="team-dashboard-nav" data-view="team-dashboard"><span aria-hidden="true">▦</span> <span class="nav-label">Team Dashboard</span></button>
+        <button class="nav-item hidden" id="reportee-assessment-nav" data-view="reportee-assessment"><span aria-hidden="true">◇</span> <span class="nav-label">Reportee assessment</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="framework-card">
+          <div class="framework-kicker">ACTIVE FRAMEWORK</div>
+          <strong>DFP 2024 v2.0</strong>
+          <span>23 standards · 6 domains</span>
+          <a href="https://isomer-user-content.by.gov.sg/95/fa0b0da9-680c-433b-9913-3817378c3bcc/development-framework-for-pharmacists-2024-v2-0.pdf" target="_blank" rel="noopener">View source framework ↗</a>
+        </div>
+        <div class="profile user-profile">
+          <div class="avatar" id="user-avatar">—</div>
+          <div><strong id="user-name">Signed in</strong><span id="user-meta">Pharmacist</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="crumb">My development <span>/</span> <strong id="crumb-label">Overview</strong></div>
+        <div class="top-actions"><span class="session-label" id="session-label"></span><button class="logout-btn" id="logout-button" type="button">Sign out</button></div>
+      </header>
+
+      <section id="overview" class="view active-view">
+        <div class="hero"><div><div class="eyebrow">PHARMACIST DEVELOPMENT WORKSPACE</div><h1>Your practice.<br><em>Your development.</em></h1><p>Bring your evidence together, reflect on your practice, and plan your next step with the Development Framework for Pharmacists.</p></div><div class="hero-art" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="pill pill-one">✚</span><span class="pill pill-two">✣</span><span class="pill pill-three">+</span></div></div>
+        <div class="privacy-banner"><span class="shield" aria-hidden="true">♢</span><div><strong>Your workspace is private</strong><span>Saved files and generated content belong to your signed-in account.</span></div></div>
+
+        <div class="reset-workspace"><div><strong>Start again</strong><p>Clear your analysis, assessment, coaching conversations, summaries and development plan. Saved evidence files stay in your inbox.</p></div><button class="secondary-btn" id="reset-workspace" type="button">Reset workspace</button></div><div class="section-heading"><div><h2 id="welcome-heading">Welcome back</h2><p id="welcome-profile">Your pharmacist profile</p></div><button class="primary-btn" data-view="evidence">+ Add evidence</button></div>
+        <div class="stat-grid"><div class="stat-card"><span class="stat-label">SAVED EVIDENCE</span><strong id="overview-evidence-count">0</strong><span class="stat-note">Files secured in your workspace</span></div><div class="stat-card"><span class="stat-label">STANDARDS TOUCHED</span><strong><span id="overview-standards-count">0</span> <small>/ 23</small></strong><span class="stat-note">Based on your current analysis</span></div><div class="stat-card accent-card"><span class="stat-label">NEXT FOCUS</span><strong>Keep evidence current</strong><span class="stat-note">Save approved work before analysis</span><div class="focus-arrow">→</div></div></div>
+        <div class="content-grid"><div class="panel recent-panel"><div class="panel-head"><div><h3>Recent evidence</h3><p>Files saved to your account</p></div><button class="link-btn" data-view="evidence">View all →</button></div><div id="recent-list"></div></div><div class="panel coverage-panel"><div class="panel-head"><div><h3>Framework coverage</h3><p>Evidence across the six domains</p></div><button class="link-btn" data-view="mappings">View assessment →</button></div><div id="coverage-list"></div></div></div>
+      </section>
+
+      <section id="evidence" class="view">
+        <div class="page-intro"><div><div class="eyebrow">EVIDENCE INBOX</div><h1>Bring your work in.</h1><p>Drop in a file, or paste an Outlook thread. Submit approved evidence before or after analysis.</p></div><div class="page-actions"><div class="file-count"><strong id="file-count-large">0</strong><span>items in inbox</span></div></div></div>
+        <div class="upload-zone" id="drop-zone"><div class="upload-icon">↥</div><h3>Drop files here</h3><p>PDF, JPG, PNG, DOCX, DOC, XLSX, TXT, MSG or EML</p><button class="primary-btn" id="browse-btn">Choose files</button><input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.docx,.doc,.xlsx,.txt,.msg,.eml" hidden /><button class="secondary-btn" id="paste-email">Paste Outlook thread</button><div class="upload-hint">Maximum 25 MB per file · Review files for confidential information before uploading</div></div>
+        <div class="ai-analysis panel" id="ai-analysis"><div class="ai-analysis-actions"><details class="outlook-prompt" id="outlook-prompt"><summary class="secondary-btn">Outlook evidence prompt</summary><div class="outlook-prompt-card"><h3>Prepare evidence from Outlook</h3><p>Copy this prompt into Outlook Copilot. Save the resulting document and upload it here.</p><label class="sr-only" for="outlook-prompt-text">Outlook evidence prompt</label><textarea id="outlook-prompt-text" readonly rows="9">Extract and summarize relevant emails from my inbox as evidence of pharmacy practice for a Development Framework for Pharmacists assessment. Provide the summary as structured text ready to paste into Word (or generate a Word document).
+
+Instructions &amp; Guardrails:
+
+• Scope: Screen all relevant inbox emails; do not limit to a single thread.
+• Format: Structure key entries with Subject &amp; Date, My Role, Actions &amp; Responsibilities, People/Teams Involved, Outcomes, and Learning &amp; Development Activities.
+• Factual Rigor: Use strict facts only. Clearly distinguish my contributions from others, cite specific dates or messages, and explicitly state if any required information is missing.
+• Restrictions: Do not infer or assign competency levels. Omit all patient-identifiable information (PII).</textarea><div class="outlook-prompt-footer"><button class="primary-btn" id="copy-outlook-prompt" type="button">Copy prompt</button><span id="copy-prompt-status" role="status" aria-live="polite"></span></div></div></details><button class="primary-btn" id="analyze-ai" type="button">Run AI Analysis →</button><span id="ai-status" aria-live="polite"></span></div></div>
+        <div id="paste-panel" class="paste-panel hidden"><div class="panel-head"><div><h3>Paste an Outlook thread</h3><p>Keep the subject and sender context if available.</p></div><button class="close-btn" id="close-paste" aria-label="Close pasted evidence">×</button></div><textarea id="email-text" placeholder="Subject: Medication reconciliation follow-up&#10;From: ...&#10;&#10;Paste the thread here..."></textarea><button class="primary-btn" id="analyze-email">Add thread to inbox</button></div>
+        <div class="section-heading compact"><div><h2>Inbox</h2><p>Review, download, submit, and analyze uploaded documents.</p></div><span id="evidence-save-status" class="save-status" aria-live="polite"></span></div>
+        <div class="panel table-panel"><div class="table-head"><span>FILE / THREAD</span><span>EXTRACTED ACTIVITY</span><span>STATUS</span><span>DOWNLOAD</span><span>ACTIONS</span></div><div id="evidence-table"></div></div>
+      </section>
+
+      <section id="mappings" class="view assessment-view">
+        <div class="page-intro"><div><div class="eyebrow">MY COMPETENCY ASSESSMENT</div><h1>Assess your evidence across the framework.</h1><p>Review the AI output, save your own response for every item, then submit it to your reporting officer.</p></div><div class="page-actions"><button class="primary-btn" id="save-assessment">Submit assessment</button></div></div>
+        <div class="assessment-layout"><section class="panel radar-panel"><div class="panel-head"><div><h3>Six-domain rating profile</h3><p>Uses reporting-officer final, your response, then AI ratings.</p></div><span class="assessment-total" id="assessment-total">0 / 23 mapped</span></div><div id="radar-chart" class="radar-chart" aria-live="polite"></div><div class="chart-legend"><span><i></i>Latest saved rating</span><span id="assessment-status-label">Not submitted</span></div></section><section class="panel domain-panel"><div class="competency-head"><div><h3>Competency overview</h3><p>Highest saved rating per sub-domain.</p></div></div><div id="domain-chart" class="domain-chart" aria-live="polite"></div></section></div>
+        <section class="panel assessment-findings"><div class="panel-head"><div><h3>Evidence findings</h3><p>Review proposed framework connections before using them in a development discussion.</p></div><span id="assessment-save-status" class="save-status" aria-live="polite"></span></div><div class="accordion-toolbar" data-accordion-controls="assessment-table"><button type="button" data-expand-all>Expand all</button><button type="button" data-collapse-all>Collapse all</button></div><div id="assessment-table" class="assessment-table"></div></section>
+        <section class="saved-panel"><div class="panel-head"><div><h3>Assessment history</h3><p>AI outputs remain separate from your submitted responses.</p></div></div><div id="saved-assessments"></div></section>
+      </section>
+
+      <section id="coaching-development" class="view coaching-development-view">
+        <div class="page-intro"><div><div class="eyebrow">COACHING &amp; DEVELOPMENT PLAN</div><h1>Think it through, then put it into action.</h1><p>Use private GROW coaching alongside an evidence-informed development plan. AI coaching is clearly labelled and is not a formal assessment.</p></div><div class="page-actions"><button class="secondary-btn" id="export-btn">Export plan ↗</button><button class="primary-btn" id="save-plan">Save plan</button></div></div>
+        <div class="coaching-development-workspace">
+          <main class="development-document-canvas">
+            <div class="development-document-meta"><div><h2>Development &amp; action plan</h2><p>Turn your evidence, coaching takeaways, and next steps into one practical plan.</p></div><span class="development-document-badge">In progress</span></div>
+            <div class="accordion-toolbar development-section-toolbar" aria-label="Development plan sections"><button type="button" data-sections-expand>Expand all</button><button type="button" data-sections-collapse>Collapse all</button></div>
+            <section class="development-section"><button type="button" class="development-accordion" data-development-toggle aria-expanded="true" aria-controls="development-coaching"><span class="section-number">1</span><span>Coaching takeaways &amp; focus areas</span><b aria-hidden="true">⌄</b></button><div id="development-coaching" class="development-accordion-content"><div class="saved-panel coaching-takeaways"><div class="panel-head"><div><h3>Saved coaching summaries</h3><p>Insights from your coaching conversations. Select any you want to include in your next saved plan, which your reporting officer can view.</p></div></div><div id="saved-coaching"></div></div></div></section>
+            <section class="development-section"><button class="development-accordion" id="development-objectives-toggle" data-development-toggle aria-expanded="true" aria-controls="development-objectives"><span class="section-number">2</span><span>Development objectives</span><b aria-hidden="true">⌄</b></button><div id="development-objectives" class="development-accordion-content"><div class="plan-tabs"><button class="plan-tab active" data-plan="gaps">Competency gaps <span id="gap-tab-count">0</span></button><button class="plan-tab" data-plan="activities">Activity view</button></div><div id="gaps-plan" class="plan-content"><div class="plan-summary"><div><span class="eyebrow">YOUR CURRENT PICTURE</span><h2>Turn evidence gaps<br><em>into clear next steps.</em></h2></div><div class="plan-summary-stats"><div><strong id="plan-standard-count">0</strong><span>standards evidenced</span></div><div><strong id="plan-gap-count">0</strong><span>priority gaps</span></div><div><strong id="plan-activity-count">0</strong><span>activities mapped</span></div></div></div><div class="accordion-toolbar" data-accordion-controls="gap-list"><button type="button" data-expand-all>Expand all</button><button type="button" data-collapse-all>Collapse all</button></div><div class="gap-list" id="gap-list"></div></div><div id="activities-plan" class="plan-content hidden"><div class="activity-cards" id="activity-cards"></div></div></div></section>
+            <section class="development-section"><button type="button" class="development-accordion" data-development-toggle aria-expanded="true" aria-controls="development-actions"><span class="section-number">3</span><span>Agreed action items</span><b aria-hidden="true">⌄</b></button><div id="development-actions" class="development-accordion-content"><div class="action-table-wrap"><table class="action-table"><thead><tr><th>Action item</th><th>Target date</th><th>Support needed from RO</th></tr></thead><tbody id="reportee-action-items"><tr><td colspan="3" class="read-only-empty">Awaiting your Reporting Officer's response.</td></tr></tbody></table></div></div></section>
+            <section class="development-section"><button type="button" class="development-accordion" data-development-toggle aria-expanded="true" aria-controls="development-notes"><span class="section-number">4</span><span>RO discussion notes</span><b aria-hidden="true">⌄</b></button><div id="development-notes" class="development-accordion-content"><div class="ro-notes-card"><label>Reporting Officer feedback &amp; approval comments</label><p id="reportee-ro-notes" class="read-only-notes">Awaiting your Reporting Officer's response.</p></div></div></section>
+            <section class="development-section"><button type="button" class="development-accordion" data-development-toggle aria-expanded="true" aria-controls="development-saved"><span class="section-number">5</span><span>Saved development plans</span><b aria-hidden="true">⌄</b></button><div id="development-saved" class="development-accordion-content"><div class="saved-panel"><div class="panel-head"><div><h3>Saved versions</h3><p>Review saved plans and earlier analysis snapshots.</p></div></div><div id="saved-plans"></div></div></div><span id="plan-save-status" class="save-status" aria-live="polite"></span></section>
+            <div class="disclaimer">Developmental planning support only · Based on DFP 2024 v2.0 · Discuss evidence and goals with your mentor or supervisor.</div>
+          </main>
+          <aside class="coaching-panel" aria-label="AI coaching assistant">
+            <div class="panel-header"><div class="panel-header-icon" aria-hidden="true">✦</div><div class="panel-header-text"><strong>AI Coaching Assistant</strong><span id="coach-context">PRIVATE COACHING</span></div><button class="secondary-btn" id="new-conversation">+ New</button></div>
+            <div class="coaching-conversation-list"><div class="coaching-conversation-heading"><strong>Conversations</strong><span>Reopen a coaching chat</span></div><div id="conversation-list"></div></div>
+            <p class="coach-rail-hint">Select a conversation or open your coaching workspace.</p>
+          </aside>
+        </div>
+        <div class="coach-launcher"><span class="coach-tooltip" role="tooltip" id="coach-tooltip">Open coaching chat</span><button type="button" id="open-coaching-chat" aria-label="Open coaching chat" aria-describedby="coach-tooltip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H9"/><rect x="4" y="8" width="16" height="12" rx="4"/><path d="M2 13h2m16 0h2M9 14h.01M15 14h.01M9 17h6"/></svg></button></div>
+        <dialog id="coach-dialog" class="coach-dialog" aria-labelledby="coach-dialog-title">
+          <div class="coach-dialog-header"><div class="coach-dialog-brand"><div class="panel-header-icon" aria-hidden="true">✦</div><div><strong id="coach-dialog-title">AI Coaching Assistant</strong><span>Private coaching workspace</span></div></div><span id="coaching-status" class="save-status coach-global-status" role="status" aria-live="polite"></span><button type="button" id="close-coaching-chat" class="coach-close" aria-label="Close coaching chat">×</button></div>
+          <div class="coach-mobile-tabs" role="tablist" aria-label="Coaching workspace"><button type="button" role="tab" aria-selected="true" data-coach-tab="chat">Chat</button><button type="button" role="tab" aria-selected="false" data-coach-tab="gaps">Gaps &amp; summary</button></div>
+          <div class="coach-dialog-body"><section class="chat-panel" id="coach-chat-pane" aria-label="Conversation"><div class="chat-header"><div><span class="coach-kicker">CONVERSATION</span><h2 id="conversation-title">Start a conversation</h2></div></div><div id="coach-starters" class="coach-starters"></div><div id="chat-messages" class="chat-messages" aria-live="polite"></div><form id="chat-form" class="chat-composer"><label class="sr-only" for="chat-input">Message your development coach</label><textarea id="chat-input" rows="2" placeholder="Ask your AI coach…" required maxlength="10000"></textarea><button class="primary-btn" id="send-message" type="submit">Send</button></form></section>
+          <aside class="coach-focus" id="coach-gaps-pane"><div><span class="coach-kicker">YOUR DEVELOPMENT</span><h2>Gaps &amp; summary</h2><p>Choose gaps for your coach to consider in chat and your summary.</p></div><div class="coach-focus-heading"><strong>Focus areas</strong><span id="coach-gap-count">0 selected</span></div><label class="coach-select-all"><input type="checkbox" id="coach-select-all"> <span>Select all gaps</span></label><div class="accordion-toolbar" data-accordion-controls="coach-gap-options"><button type="button" data-expand-all>Expand all</button><button type="button" data-collapse-all>Collapse all</button></div><div id="coach-gap-options" class="coach-gap-options"></div><button class="secondary-btn coach-summary-button" id="summarize-conversation" disabled>Summarise</button><div class="coach-summary-preview"><strong>Summary preview</strong><div id="coach-summary-preview">Your summary and next steps will appear here.</div></div><button class="primary-btn coach-summary-button" id="save-summary" disabled>Save summary</button></aside></div>
+        </dialog>
+      </section>
+
+      <section id="team-dashboard" class="view">
+        <div class="page-intro"><div><div class="eyebrow">TEAM COMPETENCY DASHBOARD</div><h1>Competency evidence profile.</h1><p>Switch between the authorised division, team, and individual views.</p></div><button class="secondary-btn" id="dashboard-export">Export dashboard ↗</button></div>
+        <div class="dashboard-tabbar" role="tablist" aria-label="Dashboard view"><button class="dashboard-scope-tab" data-dashboard-scope="division" role="tab">Division</button><button class="dashboard-scope-tab active" data-dashboard-scope="team" role="tab">Team</button><button class="dashboard-scope-tab" data-dashboard-scope="individual" role="tab">Individual</button></div>
+        <section class="team-trend panel"><div class="panel-head"><div><h3>% of competency standards met, by years in job grade</h3><p>Each point is one authorised direct reportee. Colours group the existing pharmacy sections; dotted lines show section trends.</p></div><span class="team-data-note" id="team-chart-note">Loading chart data…</span></div><div id="team-line-chart" class="team-line-chart" aria-live="polite"></div></section>
+        <section class="team-dashboard panel"><div class="panel-head"><div><h3>Team overview — select a name to drill in</h3><p>Only direct reportees are shown.</p></div><span class="team-data-note" id="team-data-note">Loading authorised data…</span></div><div class="dashboard-filters"><label>Job grade<select id="team-grade-filter"><option value="">All job grades</option></select></label><label>Section<select id="team-section-filter"><option value="">All sections</option></select></label><button class="secondary-btn" id="clear-team-filters" type="button">Clear</button></div><div class="team-score-key"><span>Domain shading</span><i class="score-key low"></i><i class="score-key mid-low"></i><i class="score-key mid"></i><i class="score-key high"></i><span>more standards met</span></div><div class="dashboard-table-wrap"><table class="team-score-table"><thead><tr><th>Staff name</th><th>Profile</th><th>D1</th><th>D2</th><th>D3</th><th>D4</th><th>D5</th><th>D6</th><th>D7</th><th>Assessment status</th></tr></thead><tbody id="team-score-body"></tbody></table></div><p class="team-score-footnote">Reporting-officer final values override submitted pharmacist values, which override the original AI output.</p></section>
+      </section>
+
+      <section id="division-dashboard" class="view">
+        <div class="page-intro"><div><div class="eyebrow">DIVISION DASHBOARD</div><h1>Division competency profile.</h1><p>View every pharmacist in the division from the relational staff directory.</p></div></div>
+        <div class="dashboard-tabbar" role="tablist" aria-label="Dashboard view"><button class="dashboard-scope-tab active" data-dashboard-scope="division" role="tab">Division</button><button class="dashboard-scope-tab" data-dashboard-scope="team" role="tab">Team</button><button class="dashboard-scope-tab" data-dashboard-scope="individual" role="tab">Individual</button></div>
+        <section class="team-trend panel"><div class="panel-head"><div><h3>% of competency standards met, by years in job grade</h3><p>Each point is one pharmacist in the division. Colours group pharmacy sections; dotted lines show supported trends.</p></div><span class="team-data-note" id="division-chart-note">Loading chart data…</span></div><div id="division-line-chart" class="team-line-chart" aria-live="polite"></div></section>
+        <section class="team-dashboard panel"><div class="panel-head"><div><h3>Division overview</h3><p>Assessment values use reporting-officer final, then pharmacist-submitted, then AI-generated precedence.</p></div><span class="team-data-note" id="division-data-note">Loading authorised data…</span></div><div class="dashboard-filters"><label>Job grade<select id="division-grade-filter"><option value="">All job grades</option></select></label><label>Section<select id="division-section-filter"><option value="">All sections</option></select></label><button class="secondary-btn" id="clear-division-filters" type="button">Clear</button></div><div class="dashboard-table-wrap"><table class="team-score-table"><thead><tr><th>Staff name</th><th>Profile</th><th>D1</th><th>D2</th><th>D3</th><th>D4</th><th>D5</th><th>D6</th><th>D7</th><th>Assessment status</th></tr></thead><tbody id="division-score-body"></tbody></table></div><p class="team-score-footnote">Rows without valid tenure or assessment values remain in this table but are safely omitted from the chart.</p></section>
+      </section>
+
+      <section id="reportee-assessment" class="view assessment-view ro-coaching-view">
+        <div class="page-intro"><div><div class="eyebrow">INDIVIDUAL VIEW</div><h1>Individual competency detail.</h1><p>Select an authorised staff member to view their competency profile, assessment detail, and coaching record.</p></div><div class="page-actions"><label class="staff-selector-label">Staff member<select id="reportee-select" class="staff-selector"><option value="">Select staff member</option></select></label></div></div>
+        <div class="dashboard-tabbar" role="tablist" aria-label="Dashboard view"><button class="dashboard-scope-tab" data-dashboard-scope="division" role="tab">Division</button><button class="dashboard-scope-tab" data-dashboard-scope="team" role="tab">Team</button><button class="dashboard-scope-tab active" data-dashboard-scope="individual" role="tab">Individual</button></div>
+        <div id="reportee-empty" class="panel"></div>
+        <div id="reportee-content" class="hidden">
+          <div class="grade-banner"><div class="grade-badge" id="reportee-grade-badge">—</div><div><strong id="reportee-grade-title">Select a direct reportee</strong><span id="reportee-grade-description">Only direct reporting relationships from the staff directory are available.</span></div><span class="status-pill" id="reportee-submission-status">Not submitted</span></div>
+          <div class="reportee-detail-tabs" role="tablist" aria-label="Individual reportee record"><button class="reportee-detail-tab active" type="button" role="tab" aria-selected="true" data-reportee-detail="assessment">Competency detail</button><button class="reportee-detail-tab" type="button" role="tab" aria-selected="false" data-reportee-detail="coaching">Coaching &amp; Development</button><button class="reportee-detail-tab" type="button" role="tab" aria-selected="false" data-reportee-detail="evidence">Evidence Inbox</button></div>
+          <div id="reportee-assessment-pane"><div class="assessment-layout"><section class="panel radar-panel"><div class="panel-head"><div><h3>Current final rating profile</h3><p>Reporting-officer values take precedence once the review is submitted.</p></div><span class="assessment-total" id="reportee-assessment-total">0 / 23 mapped</span></div><div id="reportee-radar-chart" class="radar-chart" aria-live="polite"></div><div class="chart-legend"><span><i></i>Authoritative current value</span><span>Submitted reviews update this chart</span></div></section><section class="panel domain-panel"><div class="panel-head"><div><h3>Review provenance</h3><p>AI-generated, reportee-submitted, and reporting-officer-final values remain separately labelled.</p></div></div><div class="precedence-key"><span><i class="ai-layer"></i>AI-generated</span><span><i class="reportee-layer"></i>Reportee-submitted</span><span><i class="officer-layer"></i>Reporting-officer-final</span></div></section></div><section class="panel assessment-findings"><div class="panel-head"><div><h3>Assessment items</h3><p>Edit and save your final rating and written assessment for each item.</p></div><span id="reportee-save-status" class="save-status" aria-live="polite"></span><button type="button" class="primary-btn hidden" id="submit-officer-review">Submit review</button><button type="button" class="secondary-btn hidden" id="reverse-reportee-submission">Reverse submission</button></div><div class="accordion-toolbar" data-accordion-controls="reportee-assessment-table"><button type="button" data-expand-all>Expand all</button><button type="button" data-collapse-all>Collapse all</button></div><div id="reportee-assessment-table" class="assessment-table"></div></section></div>
+          <div id="reportee-coaching-pane" class="hidden">
+          <div class="ro-record-grid">
+            <section class="panel ro-readonly-card"><div class="panel-head"><div><h3>Coaching takeaways &amp; focus areas</h3><p>Saved by the reportee from their coaching workspace.</p></div></div><div id="ro-coaching-takeaways"></div></section>
+            <section class="panel ro-readonly-card"><div class="panel-head"><div><h3>Development objectives</h3><p>Evidence-informed focus areas and recommended development work.</p></div></div><div id="ro-development-objectives"></div></section>
+            <section class="panel ro-readonly-card"><div class="panel-head"><div><h3>Saved development plans</h3><p>Previous plan snapshots remain read-only.</p></div></div><div id="ro-saved-plans"></div></section>
+            <section class="panel ro-readonly-card"><div class="panel-head"><div><h3>AI Coaching Assistant history</h3><p>Conversation history is read-only for reporting officers.</p></div></div><div id="ro-chat-history"></div></section>
+          </div>
+          <section class="panel ro-plan-review"><div class="panel-head"><div><h3>RO response</h3><p>Draft, cancel, or submit agreed action items and discussion notes.</p></div><span id="ro-plan-save-status" class="save-status" aria-live="polite"></span></div><div id="ro-plan-editor"></div></section>
+          </div>
+          <div id="reportee-evidence-pane" class="hidden"><section class="panel reportee-evidence-panel"><div class="panel-head"><div><h3>Evidence Inbox</h3><p>Evidence submitted by this staff member. Files remain read-only in this view.</p></div><span id="reportee-evidence-count" class="status-pill">0 items</span></div><div id="reportee-evidence-list"></div></section></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <dialog id="saved-detail-dialog" class="saved-detail-dialog" aria-labelledby="saved-detail-title">
+    <div class="saved-detail-header"><div><span class="eyebrow" id="saved-detail-kind"></span><h2 id="saved-detail-title"></h2><p id="saved-detail-date"></p></div><button type="button" class="secondary-btn" id="close-saved-detail">Close</button></div>
+    <div id="saved-detail-content" class="saved-detail-content"></div>
+  </dialog>
+  <dialog id="rename-dialog" class="confirm-dialog rename-dialog" aria-labelledby="rename-title">
+    <form id="rename-form"><h2 id="rename-title"></h2><label for="rename-input">Name</label><input id="rename-input" name="title" maxlength="200" required autocomplete="off"><p id="rename-error" class="rename-error" role="alert"></p><div class="confirm-actions"><button type="button" class="secondary-btn" id="rename-cancel">Cancel</button><button type="submit" class="primary-btn" id="rename-save">Save name</button></div></form>
+  </dialog>
+  <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-description">
+    <form method="dialog"><h2 id="confirm-title"></h2><p id="confirm-description"></p><div class="confirm-actions"><button class="secondary-btn" value="cancel" autofocus>Cancel</button><button class="danger-btn" id="confirm-proceed" value="confirm">Confirm</button></div></form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

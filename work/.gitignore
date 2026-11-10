@@ -1,0 +1,8 @@
+config.json
+.env
+__pycache__/
+*.pyc
+.venv/
+data/
+runtime-config.js
+node_modules/
